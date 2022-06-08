@@ -16,7 +16,7 @@ function getAll() {
 
 function getSingle(email, includePassword) {
 	const sql = `SELECT ${
-		includePassword ? "*" : "id, name, email, password"
+		includePassword ? "*" : "id, name, email"
 	} FROM users WHERE email = ?`;
 
 	return new Promise((resolve, reject) => {
