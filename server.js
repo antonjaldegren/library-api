@@ -8,13 +8,13 @@ const booksRouter = require("./routers/books.router");
 const meRouter = require("./routers/me.router");
 const usersRouter = require("./routers/users.router");
 
-const auth = require("./middlewares/auth");
+const verifyToken = require("./middlewares/auth");
 
 app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/books", booksRouter);
-app.use("/me", auth, meRouter);
-app.use("/users", auth, usersRouter);
+app.use("/me", verifyToken, meRouter);
+app.use("/users", verifyToken, usersRouter);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

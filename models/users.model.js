@@ -1,4 +1,5 @@
 const db = require("../database");
+const { getSingle: getSingleBook } = require("./books.model");
 
 function getAll() {
 	const sql = `
@@ -8,6 +9,21 @@ function getAll() {
 
 	return new Promise((resolve, reject) => {
 		db.all(sql, (err, rows) => {
+			if (err) reject(err);
+			resolve(rows);
+		});
+	});
+}
+
+function getSingle(userId, bookId) {
+	const sql = `
+    SELECT *
+    FROM loans
+    WHERE user_id = ? AND book_id = ?;
+  `;
+
+	return new Promise((resolve, reject) => {
+		db.get(sql, [userId, bookId], (err, rows) => {
 			if (err) reject(err);
 			resolve(rows);
 		});
@@ -28,14 +44,14 @@ function add(userId, bookId) {
 	});
 }
 
-function remove(userId, bookId) {
-	const sql = `
-    DELETE FROM books
+async function remove(userId, bookId) {
+	const deleteSql = `
+    DELETE FROM loans
     WHERE user_id = ? AND book_id = ?;
   `;
 
 	return new Promise((resolve, reject) => {
-		db.run(sql, [userId, bookId], (err) => {
+		db.run(deleteSql, [userId, bookId], (err) => {
 			if (err) reject(err);
 			resolve();
 		});
@@ -44,6 +60,7 @@ function remove(userId, bookId) {
 
 module.exports = {
 	getAll,
+	getSingle,
 	add,
 	remove,
 };

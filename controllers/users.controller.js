@@ -1,4 +1,5 @@
 const model = require("../models/users.model");
+const { getSingle: getSingleBook } = require("../models/books.model");
 
 async function getAllLoans(_, res) {
 	try {
@@ -11,20 +12,44 @@ async function getAllLoans(_, res) {
 }
 
 async function lendBook(req, res) {
-	// Get userId from token
-	const userId = req.params.id;
+	const userId = req.user.id;
 	const bookId = req.body.bookId;
 
 	try {
+		if (!bookId) throw new Error("Invalid book ID provided");
+
+		const book = await getSingleBook(bookId);
+		if (!book) throw new Error(`No book with ID ${bookId} was found`);
+
+		const existingLoan = await model.getSingle(userId, bookId);
+		if (existingLoan)
+			throw new Error(
+				`You already have an active loan of book with ID ${bookId}`
+			);
+
 		await model.add(userId, bookId);
 		res.status(200).json({ status: "success", data: { userId, bookId } });
 	} catch (err) {
-		res.status(400).json({ status: "error" });
+		res.status(400).json({ status: "error", message: err.message });
 	}
 }
 
-function returnBook(req, res) {
-	res.status(200).json({ success: "Book returned" });
+async function returnBook(req, res) {
+	const userId = req.user.id;
+	const bookId = req.body.bookId;
+
+	try {
+		if (!bookId) throw new Error("Invalid book ID provided");
+
+		const existingLoan = await model.getSingle(userId, bookId);
+		if (!existingLoan)
+			throw new Error(`No loan of book with ID ${bookId} was found`);
+
+		await model.remove(userId, bookId);
+		res.status(200).json({ status: "success", data: { userId, bookId } });
+	} catch (err) {
+		res.status(400).json({ status: "error", message: err.message });
+	}
 }
 
 module.exports = {

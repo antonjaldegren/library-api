@@ -42,7 +42,7 @@ async function getSingleBook(req, res) {
 
 	try {
 		const result = await model.getSingle(id);
-		if (!result) throw new Error(`No book with id ${id} was found`);
+		if (!result) throw new Error(`No book with ID ${id} was found`);
 
 		res.status(200).json({ status: "success", data: result });
 	} catch (err) {
@@ -65,7 +65,7 @@ async function editBook(req, res) {
 		await model.edit(id, data);
 
 		const editedBook = await model.getSingle(id);
-		if (!editedBook) throw new Error(`No book with id ${id} was found`);
+		if (!editedBook) throw new Error(`No book with ID ${id} was found`);
 
 		res.status(200).json({ status: "success", data: editedBook });
 	} catch (err) {
@@ -96,7 +96,7 @@ async function deleteBook(req, res) {
 
 	try {
 		const deletedBook = await model.getSingle(id);
-		if (!deletedBook) throw new Error(`No book with id ${id} was found`);
+		if (!deletedBook) throw new Error(`No book with ID ${id} was found`);
 
 		await model.remove(id);
 
