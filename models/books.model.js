@@ -1,5 +1,6 @@
 const db = require("../database");
 
+const VALID_KEYS = ["title", "author", "genre", "publishedAt", "qty"];
 /**
  * {
  *    id: string,
@@ -11,34 +12,36 @@ const db = require("../database");
  * }
  */
 
-function getAll(cb) {
+function getAll() {
 	const sql = `
-  SELECT *
-  FROM books;
+    SELECT *
+    FROM books;
   `;
-	const params = [];
 
-	db.all(sql, params, (err, rows) => {
-		cb({ message: err ? "error" : "success", data: rows });
+	return new Promise((resolve, reject) => {
+		db.all(sql, (err, rows) => {
+			if (err) reject(err);
+			resolve(rows);
+		});
 	});
 }
 
-function getSingle(id, cb) {
+function getSingle(id) {
 	const sql = `
-  SELECT *
-  FROM books
-  WHERE id = ?;
+    SELECT *
+    FROM books
+    WHERE id = ?;
   `;
-	const params = [id];
 
-	db.get(sql, params, (err, row) => {
-		cb({ message: err ? "error" : "success", data: row });
+	return new Promise((resolve, reject) => {
+		db.get(sql, id, (err, row) => {
+			if (err) reject(err);
+			resolve(row);
+		});
 	});
 }
 
-const VALID_KEYS = ["title", "author", "genre", "publishedAt", "qty"];
-
-function edit(id, data, cb) {
+function edit(id, data) {
 	const sql = `
     UPDATE books SET
     title = COALESCE(?, title), 
@@ -50,23 +53,41 @@ function edit(id, data, cb) {
   `;
 	const params = [...VALID_KEYS.map((key) => data[key]), id];
 
-	db.run(sql, params, (err, result) => {
-		cb({ message: err ? "error" : "success", data: result });
+	return new Promise((resolve, reject) => {
+		db.run(sql, params, (err) => {
+			if (err) reject(err);
+			resolve();
+		});
 	});
 }
 
 function add(data) {
 	const sql = `
     INSERT INTO books (id, title, author, genre, publishedAt, qty)
-    VALUES (?, ?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?);
   `;
+	const params = [data.id, ...VALID_KEYS.map((key) => data[key])];
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, params, (err) => {
+			if (err) reject(err);
+			resolve();
+		});
+	});
 }
 
 function remove(id) {
 	const sql = `
-    DELETE FROM recipes
-    WHERE id = '${id}';
+    DELETE FROM books
+    WHERE id = ?;
   `;
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, id, (err) => {
+			if (err) reject(err);
+			resolve();
+		});
+	});
 }
 
 module.exports = {

@@ -10,9 +10,9 @@ booksRouter.use(validateRequest);
 
 booksRouter.get("/", booksController.getAllBooks);
 booksRouter.get("/:id", booksController.getSingleBook);
-booksRouter.put("/:id", booksController.putBook);
-booksRouter.patch("/:id", booksController.patchBook);
-booksRouter.post("/", booksController.postBook);
+booksRouter.put("/:id", booksController.editBook);
+booksRouter.patch("/:id", booksController.editBook);
+booksRouter.post("/", booksController.addBook);
 booksRouter.delete("/:id", booksController.deleteBook);
 
 module.exports = booksRouter;

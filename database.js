@@ -9,38 +9,31 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
 
 	console.log("Connected to database");
 
-	const statement = `
-    CREATE TABLE books (
-      id TEXT PRIMARY KEY UNIQUE,
+	const statements = {
+		books: `
+    CREATE TABLE IF NOT EXISTS books (
+      id TEXT PRIMARY KEY AUTOINCREMENT,
       title TEXT,
       author TEXT,
       genre TEXT,
-      publishedAt DATE,
+      publishedAt TEXT,
       qty INTEGER
-    )`;
+    )`,
+		users: `
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      email TEXT,
+      password TEXT,
+    )`,
+	};
 
-	db.run(statement, (err) => {
-		if (err) return console.error(err.message);
+	db.run(statements.books, (err) => {
+		if (err) console.error(err.message);
+	});
 
-		const insert =
-			"INSERT INTO books (id, title, author, genre, publishedAt, qty) VALUES (?, ?, ?, ?, ?, ?)";
-
-		db.run(insert, [
-			"123abc",
-			"Min bok",
-			"Anton Jaldegren",
-			"Horror",
-			"2015-03-14",
-			75,
-		]);
-		db.run(insert, [
-			"456def",
-			"Min andra bok",
-			"Anton Jaldegren",
-			"Fantacy",
-			"1999-08-24",
-			46,
-		]);
+	db.run(statements.users, (err) => {
+		if (err) console.error(err.message);
 	});
 });
 
