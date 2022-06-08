@@ -21,11 +21,12 @@ async function lendBook(req, res) {
 		const book = await getSingleBook(bookId);
 		if (!book) throw new Error(`No book with ID ${bookId} was found`);
 
+		if (book.qty === 0)
+			throw new Error(`No copies of ${book.title} are available`);
+
 		const existingLoan = await model.getSingle(userId, bookId);
 		if (existingLoan)
-			throw new Error(
-				`You already have an active loan of book with ID ${bookId}`
-			);
+			throw new Error(`You already have an active loan of ${book.title}`);
 
 		await model.add(userId, bookId);
 		res.status(200).json({ status: "success", data: { userId, bookId } });

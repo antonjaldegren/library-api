@@ -1,8 +1,12 @@
 const model = require("../models/me.model");
 
 async function getMe(req, res) {
-	const result = await model.get();
-	res.status(200).json({ data: "This is my protected data" });
+	const id = req.user.id;
+
+	const loans = await model.getLoans(id);
+	const user = await model.getUser(id);
+
+	res.status(200).json({ status: "success", data: { loans, user } });
 }
 
 module.exports = {
