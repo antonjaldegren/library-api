@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const model = require("../models/books.model");
 
 function isValidData(req) {
@@ -78,7 +77,6 @@ async function addBook(req, res) {
 	try {
 		if (!isValidData(req)) throw new Error("Invalid data");
 		const data = {
-			id: uuidv4(),
 			title: req.body.title,
 			author: req.body.author,
 			genre: req.body.genre,
@@ -87,7 +85,7 @@ async function addBook(req, res) {
 		};
 		await model.add(data);
 
-		res.status(200).json({ status: "success", data });
+		res.status(201).json({ status: "success", data });
 	} catch (err) {
 		res.status(400).json({ status: "error", message: err.message });
 	}

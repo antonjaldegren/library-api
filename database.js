@@ -1,7 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
 const db = new sqlite3.Database("./db.sqlite", (err) => {
-	// Try/catch?
 	if (err) {
 		console.error(err.message);
 		throw err;
@@ -12,20 +11,25 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
 	const statements = {
 		books: `
     CREATE TABLE IF NOT EXISTS books (
-      id TEXT PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT,
       author TEXT,
       genre TEXT,
       publishedAt TEXT,
       qty INTEGER
-    )`,
+    );`,
 		users: `
     CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
-      email TEXT,
-      password TEXT,
-    )`,
+      email TEXT UNIQUE,
+      password TEXT
+    );`,
+		loans: `
+    CREATE TABLE IF NOT EXISTS loans (
+      user_id TEXT,
+      book_id TEXT
+    );`,
 	};
 
 	db.run(statements.books, (err) => {
@@ -33,6 +37,10 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
 	});
 
 	db.run(statements.users, (err) => {
+		if (err) console.error(err.message);
+	});
+
+	db.run(statements.loans, (err) => {
 		if (err) console.error(err.message);
 	});
 });

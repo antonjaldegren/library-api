@@ -63,10 +63,10 @@ function edit(id, data) {
 
 function add(data) {
 	const sql = `
-    INSERT INTO books (id, title, author, genre, publishedAt, qty)
-    VALUES (?, ?, ?, ?, ?, ?);
+    INSERT INTO books (title, author, genre, publishedAt, qty)
+    VALUES (?, ?, ?, ?, ?);
   `;
-	const params = [data.id, ...VALID_KEYS.map((key) => data[key])];
+	const params = [...VALID_KEYS.map((key) => data[key])];
 
 	return new Promise((resolve, reject) => {
 		db.run(sql, params, (err) => {
