@@ -61,15 +61,15 @@ function edit(id, data) {
 
 function add(data) {
 	const sql = `
-    INSERT INTO books (title, author, genre, publishedAt, qty)
-    VALUES (?, ?, ?, ?, ?);
+    INSERT INTO books (title, author, genre, qty)
+    VALUES (?, ?, ?, ?);
   `;
 	const params = [...VALID_KEYS.map((key) => data[key])];
 
 	return new Promise((resolve, reject) => {
-		db.run(sql, params, (err) => {
+		db.run(sql, params, function (err) {
 			if (err) reject(err);
-			resolve();
+			resolve(this.lastID);
 		});
 	});
 }

@@ -42,7 +42,6 @@ async function loginUser(req, res) {
 		if (!email || !password) throw new Error("Data missing");
 
 		const existingUser = await model.getSingle(email, true);
-		console.log("existingUser: ", existingUser);
 		if (!existingUser) throw new Error(`No user found with email ${email}`);
 
 		const hashedPassword = md5(password);

@@ -26,10 +26,17 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
     );`,
 		loans: `
     CREATE TABLE IF NOT EXISTS loans (
-      user_id TEXT REFERENCES users (id),
-      book_id TEXT REFERENCES books (id)
+      user_id INTEGER,
+      book_id INTEGER,
+			FOREIGN KEY(user_id) REFERENCES users(id),
+			FOREIGN KEY(book_id) REFERENCES books(id)
+			ON DELETE CASCADE
     );`,
 	};
+
+	db.exec("PRAGMA foreign_keys = ON;", (err) => {
+		if (err) console.error(err.message);
+	});
 
 	db.run(statements.books, (err) => {
 		if (err) console.error(err.message);

@@ -2,8 +2,9 @@ const db = require("../database");
 
 function getLoans(userId) {
 	const sql = `
-    SELECT book_id
+    SELECT id, title, author, genre, qty
     FROM loans
+		INNER JOIN books ON id = book_id
     WHERE user_id = ?;
   `;
 
@@ -23,7 +24,7 @@ function getUser(userId) {
   `;
 
 	return new Promise((resolve, reject) => {
-		db.all(sql, userId, (err, rows) => {
+		db.get(sql, userId, (err, rows) => {
 			if (err) reject(err);
 			resolve(rows);
 		});

@@ -51,9 +51,10 @@ async function addBook(req, res) {
 			genre: req.body.genre,
 			qty: req.body.qty,
 		};
-		await model.add(data);
+		const id = await model.add(data);
+		const newBook = await model.getSingle(id);
 
-		res.status(201).json({ status: "success", data });
+		res.status(201).json({ status: "success", newBook });
 	} catch (err) {
 		res.status(400).json({ status: "error", message: err.message });
 	}
