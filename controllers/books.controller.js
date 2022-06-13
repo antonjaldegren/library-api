@@ -1,32 +1,5 @@
 const model = require("../models/books.model");
 
-function isValidData(req) {
-	const { body: data, method } = req;
-
-	if (typeof data !== "object" || data === null || Array.isArray(data))
-		return false;
-	if (["POST", "PUT"].includes(method)) {
-		return (
-			typeof data.title === "string" &&
-			data.title.length > 0 &&
-			typeof data.author === "string" &&
-			data.title.length > 0 &&
-			typeof data.genre === "string" &&
-			data.title.length > 0 &&
-			typeof data.publishedAt === "string" &&
-			data.title.length > 0 &&
-			typeof data.qty === "number"
-		);
-	}
-	return (
-		(typeof data.title === "string" && data.title.length > 0) ||
-		(typeof data.author === "string" && data.title.length > 0) ||
-		(typeof data.genre === "string" && data.title.length > 0) ||
-		(typeof data.publishedAt === "string" && data.title.length > 0) ||
-		typeof data.qty === "number"
-	);
-}
-
 async function getAllBooks(_, res) {
 	try {
 		const result = await model.getAll();
@@ -52,14 +25,11 @@ async function getSingleBook(req, res) {
 
 async function editBook(req, res) {
 	try {
-		if (!isValidData(req)) throw new Error("Invalid data");
-
 		const id = req.params.id;
 		const data = {
 			title: req.body.title,
 			author: req.body.author,
 			genre: req.body.genre,
-			publishedAt: req.body.publishedAt,
 			qty: req.body.qty,
 		};
 		await model.edit(id, data);
@@ -75,12 +45,10 @@ async function editBook(req, res) {
 
 async function addBook(req, res) {
 	try {
-		if (!isValidData(req)) throw new Error("Invalid data");
 		const data = {
 			title: req.body.title,
 			author: req.body.author,
 			genre: req.body.genre,
-			publishedAt: req.body.publishedAt,
 			qty: req.body.qty,
 		};
 		await model.add(data);

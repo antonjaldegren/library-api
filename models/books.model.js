@@ -1,13 +1,12 @@
 const db = require("../database");
 
-const VALID_KEYS = ["title", "author", "genre", "publishedAt", "qty"];
+const VALID_KEYS = ["title", "author", "genre", "qty"];
 /**
  * {
  *    id: string,
  *    title: string,
  *    author: string,
  *    genre: string,
- *    publishedAt: date,
  *    qty: number,
  * }
  */
@@ -47,7 +46,6 @@ function edit(id, data) {
     title = COALESCE(?, title), 
     author = COALESCE(?, author), 
     genre = COALESCE(?, genre),
-    publishedAt = COALESCE(?, publishedAt),
     qty = COALESCE(?, qty)
     WHERE id = ?;
   `;

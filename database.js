@@ -15,7 +15,6 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
       title TEXT,
       author TEXT,
       genre TEXT,
-      publishedAt TEXT,
       qty INTEGER
     );`,
 		users: `
@@ -27,8 +26,8 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
     );`,
 		loans: `
     CREATE TABLE IF NOT EXISTS loans (
-      user_id TEXT,
-      book_id TEXT
+      user_id TEXT REFERENCES users (id),
+      book_id TEXT REFERENCES books (id)
     );`,
 	};
 
