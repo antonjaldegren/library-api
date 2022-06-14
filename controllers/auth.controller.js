@@ -2,16 +2,6 @@ const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 const model = require("../models/auth.model");
 
-async function getAllUsers(_, res) {
-	try {
-		const result = await model.getAll();
-
-		res.status(200).json({ status: "success", data: result });
-	} catch (err) {
-		res.status(400).json({ status: "error", message: err.message });
-	}
-}
-
 async function registerUser(req, res) {
 	const { name, email, password } = req.body;
 	try {
@@ -64,7 +54,6 @@ async function loginUser(req, res) {
 }
 
 module.exports = {
-	getAllUsers,
 	registerUser,
 	loginUser,
 };

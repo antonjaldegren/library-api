@@ -6,25 +6,29 @@ function validateData(req, res, next) {
 			.status(400)
 			.json({ status: "error", message: "Invalid json" });
 
-	if (
-		["POST", "PUT"].includes(method) &&
-		typeof data.title === "string" &&
-		data.title.length > 0 &&
-		typeof data.author === "string" &&
-		data.author.length > 0 &&
-		typeof data.genre === "string" &&
-		data.genre.length > 0 &&
-		typeof data.qty === "number" &&
-		data.qty >= 0
-	) {
-		return next();
-	} else if (
-		(typeof data.title === "string" && data.title.length > 0) ||
-		(typeof data.author === "string" && data.author.length > 0) ||
-		(typeof data.genre === "string" && data.genre.length > 0) ||
-		(typeof data.qty === "number" && data.qty >= 0)
-	) {
-		return next();
+	if (["POST", "PUT"].includes(method)) {
+		if (
+			typeof data.title === "string" &&
+			data.title.length > 0 &&
+			typeof data.author === "string" &&
+			data.author.length > 0 &&
+			typeof data.genre === "string" &&
+			data.genre.length > 0 &&
+			typeof data.qty === "number" &&
+			data.qty >= 0
+		) {
+			return next();
+		}
+	} else if (method === "PATCH") {
+		if (
+			(typeof data.title === "string" && data.title.length > 0) ||
+			(typeof data.author === "string" && data.author.length > 0) ||
+			(typeof data.genre === "string" && data.genre.length > 0) ||
+			(typeof data.qty === "number" && data.qty >= 0)
+		) {
+			console.log("validating...");
+			return next();
+		}
 	}
 
 	res.status(400).json({ status: "error", message: "Invalid data" });

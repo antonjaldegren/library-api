@@ -4,16 +4,6 @@ const {
 	edit: editBook,
 } = require("../models/books.model");
 
-async function getAllLoans(_, res) {
-	try {
-		const result = await model.getAll();
-
-		res.status(200).json({ status: "success", data: result });
-	} catch (err) {
-		res.status(400).json({ status: "error", message: err.message });
-	}
-}
-
 async function lendBook(req, res) {
 	const userId = req.user.id;
 	const bookId = req.body.bookId;
@@ -64,7 +54,6 @@ async function returnBook(req, res) {
 }
 
 module.exports = {
-	getAllLoans,
 	lendBook,
 	returnBook,
 };

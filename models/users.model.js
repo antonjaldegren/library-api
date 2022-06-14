@@ -1,19 +1,4 @@
 const db = require("../database");
-const { getSingle: getSingleBook } = require("./books.model");
-
-function getAll() {
-	const sql = `
-    SELECT *
-    FROM loans;
-  `;
-
-	return new Promise((resolve, reject) => {
-		db.all(sql, (err, rows) => {
-			if (err) reject(err);
-			resolve(rows);
-		});
-	});
-}
 
 function getSingle(userId, bookId) {
 	const sql = `
@@ -59,7 +44,6 @@ async function remove(userId, bookId) {
 }
 
 module.exports = {
-	getAll,
 	getSingle,
 	add,
 	remove,

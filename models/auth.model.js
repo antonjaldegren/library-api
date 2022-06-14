@@ -1,19 +1,5 @@
 const db = require("../database");
 
-function getAll() {
-	const sql = "SELECT * FROM users";
-
-	return new Promise((resolve, reject) => {
-		db.all(sql, (err, rows) => {
-			if (err) {
-				console.error(err);
-				reject(err);
-			}
-			resolve(rows);
-		});
-	});
-}
-
 function getSingle(email, includePassword) {
 	const sql = `SELECT ${
 		includePassword ? "*" : "id, name, email"
@@ -46,7 +32,6 @@ function add(user) {
 }
 
 module.exports = {
-	getAll,
 	getSingle,
 	add,
 };
